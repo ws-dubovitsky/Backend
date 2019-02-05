@@ -1,38 +1,41 @@
-var express = require("express");
+const express = require("express");
+const app = express();
 
-var app = express(); // close routes
-var bodyParser = require("body-parser");
-var authMiddleware = require("./middlewares/auth.middleware.js");
-var config = require("./config/constant");
-// app.use(express.static('public'));
+require("./routes/weather.route")(app);
 
-var mongoose = require("mongoose");
+app.listen(3001);
+// close routes
+// var bodyParser = require("body-parser");
+// var authMiddleware = require("./middlewares/auth.middleware.js");
+// var config = require("./config/constant");
+// // app.use(express.static('public'));
 
-var db = mongoose.createConnection(config.db_main);
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
-  console.log("Conncet");
-});
+// var mongoose = require("mongoose");
 
-require("./config/schemas/user");
-//require('./schemas/history.schema');
-// require('./models/user.model')(mongoose)
+// var db = mongoose.createConnection(config.db_main);
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", function() {
+//   console.log("Conncet");
+// });
 
-// Add Routes
-module.exports = {
-  main: db
-};
+// require("./config/schemas/user");
+// //require('./schemas/history.schema');
+// // require('./models/user.model')(mongoose)
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
-app.use(bodyParser.json());
+// // Add Routes
+// module.exports = {
+//   main: db
+// };
 
-app.use("/api", authMiddleware);
+// // parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: false }));
+// // parse application/json
+// app.use(bodyParser.json());
+
+// app.use("/api", authMiddleware);
 
 // Routes
-require("./routes/auth.route")(app);
-require("./routes/weather.route")(app);
+// require("./routes/auth.route")(app);
 
 // app.get('/', function (req, res) {
 //   res.sendFile('index.html');
@@ -40,7 +43,3 @@ require("./routes/weather.route")(app);
 // app.get('/test', function (req, res) {
 //     res.send('Hello');
 //   });
-
-app.listen(3000, function() {
-  console.log("Example app listening on port 3000!");
-});
