@@ -20,21 +20,22 @@
 //     });
 // }
 
-function getWeather() {
-  var axios = require("axios");
-  const url =
-    "https://api.openweathermap.org/data/2.5/weather?q=London,us&appid=a1940f6091cee8f1939beaa1ed9a82dc";
-  return axios
-    .get(url)
-    .then(response => {
-      console.log(response);
-      return response;
-    })
-    .catch(err => {
-      console.log(err);
-    });
+function postWeather(req, res) {
+  console.log('req', req.body);
+  // var axios = require("axios");
+  // const url =
+  //   "http://localhost:3000/";
+  // return axios
+  //   .get(url)
+  //   .then(response => {
+  //     console.log(response);
+  //     return response;
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
 }
 
 module.exports = {
-  getWeather: getWeather
+  postWeather
 };
