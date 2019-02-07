@@ -1,41 +1,28 @@
-// let weatherModel = require("../models/weather.model");
+const axios = require("axios");
 
-// function getWeather(req, res) {
-//
-//   const newWeather = {
-//     weather: axios.get(url)
-//   };
+const API = "a1940f6091cee8f1939beaa1ed9a82dc";
 
-//   return weatherModel
-//     .create(newWeather)
-//     .then(result => {
-//       console.log(result);
-//       return result;
-//     })
-//     .then(result => {
-//       res.status(200).send({ message: `Hello ${req.body.username}` });
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// }
+function getWeather(req, res) {
+  console.log("req", req.body);
+  const lat = req.body.lat;
+  const lon = req.body.lon;
+  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API}`;
 
-function postWeather(req, res) {
-  console.log('req', req.body);
-  // var axios = require("axios");
-  // const url =
-  //   "http://localhost:3000/";
-  // return axios
-  //   .get(url)
-  //   .then(response => {
-  //     console.log(response);
-  //     return response;
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
+  return axios.get(url).then(response => {
+    res.status(200).send(response.data);
+  });
 }
 
 module.exports = {
-  postWeather
+  getWeather
 };
+
+// async function getUser() {
+//   try {
+//     const response = await axios.post(url);
+//     console.log(response);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+// return res.status(200).send(response);

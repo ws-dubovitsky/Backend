@@ -2,7 +2,7 @@ let WeatherController = require("../controllers/weather.controller.js");
 // axios = require("axios");
 
 module.exports = function(app) {
-  app.post("/api/weather", WeatherController.postWeather);
+  app.post("/api/weather", WeatherController.getWeather);
 };
 
 // app.get('/user/:id', UserController.getOneUser);
