@@ -1,7 +1,7 @@
 (function() {
   "use strict";
-  var server = require("../server.js");
-  var User = server.main.model("User");
+  const server = require("../server.js");
+  const User = server.main.model("User");
 
   module.exports = {
     create,

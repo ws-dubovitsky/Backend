@@ -1,6 +1,5 @@
 let UserModel = require("../models/user.model");
 
-
 function checkLogin(req, res) {
   console.log("checkLogin", req.query);
   res.status(401).send({ message: "done" });
@@ -26,9 +25,10 @@ function register(req, res) {
     password: req.body.password
   };
 
+  // console.log("req.body", req.body);
   return UserModel.create(newUser)
     .then(result => {
-      console.log(result);
+      console.log("RESULT", result);
       return result;
     })
 
@@ -47,11 +47,11 @@ module.exports = {
 };
 
 // return new Promise((resolve, reject) => {
-//     return AuthController.register()
-//         .then(result => {
-//             resolve({result})
-//         })
-//         .catch(err => {
-//             reject(err)
-//         })
-// })
+//   return AuthController.register()
+//     .then(result => {
+//       resolve({ result });
+//     })
+//     .catch(err => {
+//       reject(err);
+//     });
+// });
