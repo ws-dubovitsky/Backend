@@ -9,7 +9,6 @@ process.env.SECRET_KEY = "secret";
 
 //REGISTER
 
-// users.post("/register", (req, res) => {
 function register(req, res) {
   const today = new Date();
   const userData = {
@@ -52,6 +51,8 @@ function login(req, res) {
   })
     .then(user => {
       if (user) {
+        console.log("req.body.password", req.body.password);
+        console.log("user.password", user.password);
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const payload = {
             _id: user.id,
@@ -73,6 +74,8 @@ function login(req, res) {
       res.send("error" + err);
     });
 }
+
+//PROFILE
 
 function profile(req, res) {
   let decoded = jwt.verify(
