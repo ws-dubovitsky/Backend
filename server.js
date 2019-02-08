@@ -1,17 +1,17 @@
+
+// var db = mongoose.createConnection(config.db_main);
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", function() {
+//   console.log("Conncet");
+// });
+
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-var config = require("./config/constant");
-
 var mongoose = require("mongoose");
-
-const port = 3001;
-
-var db = mongoose.createConnection(config.db_main);
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
-  console.log("Conncet");
-});
+var cors = require("cors");
+var config = require("./config/constant");
+var port = 3001;
 
 app.use((req, res, next) => {
   const responseSettings = {
@@ -49,37 +49,64 @@ app.use((req, res, next) => {
   }
 });
 
-var db = mongoose.createConnection(config.db_main);
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
-  console.log("Conncet");
-});
-
-require("./config/schemas/user");
-
-module.exports = {
-  main: db
-};
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.json());
-// parse application/json
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 
-// Routes
-require("./routes/auth.route")(app);
+const mongoURI = config.db_main;
+
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log(err));
+
+var Users = require("./routes/Users");
 require("./routes/weather.route")(app);
 
-// app.get('/', function (req, res) {
-//   res.sendFile('index.html');
-// });
-// app.get("/test", function(req, res) {
-//   res.send("Hello");
-// });
+app.use("/users", Users);
 
-// Add Routes
-
-// app.use("/api", authMiddleware);
 
 app.listen(port, () => {
   console.log("We are live on " + port);
 });
+
+// var db = mongoose.createConnection(config.db_main);
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", function() {
+//   console.log("Conncet");
+// });
+
+// require("./config/schemas/user");
+
+// module.exports = {
+//   main: db
+// };
+// // parse application/x-www-form-urlencoded
+// app.use(bodyParser.json());
+// // parse application/json
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// // Routes
+// require("./routes/auth.route")(app);
+
+
+// // app.get('/', function (req, res) {
+// //   res.sendFile('index.html');
+// // });
+// // app.get("/test", function(req, res) {
+// //   res.send("Hello");
+// // });
+
+// // Add Routes
+
+// // app.use("/api", authMiddleware);
+
+// app.listen(port, () => {
+//   console.log("We are live on " + port);
+// });

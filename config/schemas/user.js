@@ -1,10 +1,10 @@
-var mongoose = require("mongoose");
+// var mongoose = require("mongoose");
 
-var Schema = mongoose.Schema;
+// var Schema = mongoose.Schema;
 
-var userSchema = new Schema({
-  username: String,
-  password: String
-});
+// var userSchema = new Schema({
+//   username: String,
+//   password: String
+// });
 
-mongoose.model("User", userSchema);
+// mongoose.model("User", userSchema);
