@@ -1,10 +1,3 @@
-
-// var db = mongoose.createConnection(config.db_main);
-// db.on("error", console.error.bind(console, "connection error:"));
-// db.once("open", function() {
-//   console.log("Conncet");
-// });
-
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -66,35 +59,14 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
+// // Routes
 var Users = require("./routes/Users");
 require("./routes/weather.route")(app);
-
 app.use("/users", Users);
-
 
 app.listen(port, () => {
   console.log("We are live on " + port);
 });
-
-// var db = mongoose.createConnection(config.db_main);
-// db.on("error", console.error.bind(console, "connection error:"));
-// db.once("open", function() {
-//   console.log("Conncet");
-// });
-
-// require("./config/schemas/user");
-
-// module.exports = {
-//   main: db
-// };
-// // parse application/x-www-form-urlencoded
-// app.use(bodyParser.json());
-// // parse application/json
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-// // Routes
-// require("./routes/auth.route")(app);
-
 
 // // app.get('/', function (req, res) {
 // //   res.sendFile('index.html');
@@ -106,7 +78,3 @@ app.listen(port, () => {
 // // Add Routes
 
 // // app.use("/api", authMiddleware);
-
-// app.listen(port, () => {
-//   console.log("We are live on " + port);
-// });
