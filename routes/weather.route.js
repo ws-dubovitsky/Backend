@@ -9,11 +9,3 @@ module.exports = function(app) {
 // app.put('/user/:id', UserController.editUser);
 // app.delete('/user/:id', UserController.deleteUser);
 
-// module.exports = function(app) {
-//   app.post("/auth/register", AuthController.register);
-//   app.post("/auth/login", AuthController.login);
-
-//   // app.get('/api/isAuthorized', auth, AuthController.isAuthorized )
-// };
-
-// get all todos

@@ -1,10 +1,10 @@
 const express = require("express");
-const users = express.Router();
-const cors = require("cors");
+// const users = express.Router();
+// const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../config/schemas/User");
-users.use(cors());
+// users.use(cors());
 process.env.SECRET_KEY = "secret";
 
 //REGISTER
@@ -28,10 +28,10 @@ function register(req, res) {
           userData.password = hash;
           User.create(userData)
             .then(user => {
-              res.json({ status: user.email + " registered" });
+              res.status(200).send({ status: user.email + " registered" });
             })
             .catch(err => {
-              res.send("error: " + err);
+              res.status(401).send("error: " + err);
             });
         });
       } else {
@@ -39,7 +39,7 @@ function register(req, res) {
       }
     })
     .catch(err => {
-      res.send("error: " + err);
+      res.status(401).send("error: " + err);
     });
 }
 
@@ -51,8 +51,6 @@ function login(req, res) {
   })
     .then(user => {
       if (user) {
-        console.log("req.body.password", req.body.password);
-        console.log("user.password", user.password);
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const payload = {
             _id: user.id,
@@ -64,9 +62,9 @@ function login(req, res) {
             expiresIn: 1440
           });
 
-          res.send(token);
+          res.status(200).send(token);
         } else {
-          res.json({ error: "User does not exist" });
+          res.status(401).send({ error: "User does not exist" });
         }
       }
     })
@@ -78,23 +76,24 @@ function login(req, res) {
 //PROFILE
 
 function profile(req, res) {
-  let decoded = jwt.verify(
-    req.headers["authorization"],
-    process.env.SECRET_KEY
-  );
-  User.findOne({
-    _id: decoded._id
-  })
-    .then(user => {
-      if (user) {
-        res.json(user);
-      } else {
-        res.send("User does not exist");
-      }
-    })
-    .catch(err => {
-      res.send("error: " + err);
-    });
+  // let decoded = jwt.verify(
+  //   req.headers["authorization"],
+  //   process.env.SECRET_KEY
+  // );
+  // User.findOne({
+  //   _id: decoded._id
+  // })
+  //   .then(user => {
+  //     if (user) {
+  //       res.json(user);
+  //       req.user = user
+  //     } else {
+  //       res.send("User does not exist");
+  //     }
+  //   })
+  //   .catch(err => {
+  //     res.send("error: " + err);
+  //   });
 }
 
 module.exports = {

@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-var cors = require("cors");
-var config = require("./config/constant");
-var port = 3001;
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+const authMiddleware = require("./middlewares/auth.middleware");
+const config = require("./config/constant");
+const Users = require("./routes/Users");
+const port = 3001;
+const mongoURI = config.db_main;
 
 app.use((req, res, next) => {
   const responseSettings = {
@@ -50,8 +54,6 @@ app.use(
   })
 );
 
-const mongoURI = config.db_main;
-
 mongoose
   .connect(mongoURI, {
     useNewUrlParser: true
@@ -59,8 +61,9 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
+app.use("/api", authMiddleware);
+
 // // Routes
-var Users = require("./routes/Users");
 require("./routes/weather.route")(app);
 app.use("/users", Users);
 
@@ -76,5 +79,3 @@ app.listen(port, () => {
 // // });
 
 // // Add Routes
-
-// // app.use("/api", authMiddleware);

@@ -9,9 +9,19 @@ function getWeather(req, res) {
     config.API
   }`;
 
-  return axios.get(url).then(response => {
-    res.status(200).send(response.data);
-  });
+  return axios.get(url)
+    // .then(response => {
+      
+    //   // return HitooryModel.addNew({
+    //   //   userId: ... req.user._id
+    //   //   createdAt: new Date(),
+    //   //   list: response.data.list,
+    //   //   city: 
+    //   // })
+    // })
+    .then(response => {
+      res.status(200).send(response.data);
+    });
 }
 
 module.exports = {
