@@ -1,27 +1,22 @@
 const axios = require("axios");
 const config = require("../config/constant");
+const History = require("../config/schemas/History");
 
 function getWeather(req, res) {
-  console.log("req", req.body);
   const lat = req.body.lat;
   const lon = req.body.lon;
   const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${
     config.API
   }`;
 
-  return axios.get(url)
-    // .then(response => {
-      
-    //   // return HitooryModel.addNew({
-    //   //   userId: ... req.user._id
-    //   //   createdAt: new Date(),
-    //   //   list: response.data.list,
-    //   //   city: 
-    //   // })
-    // })
-    .then(response => {
-      res.status(200).send(response.data);
-    });
+  return axios.get(url).then(response => {
+    res.status(200).send(response.data);
+    const newHistory = new History();
+    newHistory.userID = req.user._id;
+    newHistory.weatherList = response.data.list;
+    newHistory.city = response.data.city.name;
+    newHistory.save();
+  });
 }
 
 module.exports = {

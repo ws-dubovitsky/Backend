@@ -1,10 +1,7 @@
-const express = require("express");
-// const users = express.Router();
-// const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../config/schemas/User");
-// users.use(cors());
+// const History = require("../config/schemas/History");
 process.env.SECRET_KEY = "secret";
 
 //REGISTER
@@ -18,6 +15,8 @@ function register(req, res) {
     password: req.body.password,
     created: today
   };
+
+  // console.log("UserData", userData);
 
   User.findOne({
     email: req.body.email
@@ -46,6 +45,13 @@ function register(req, res) {
 //LOGIN
 
 function login(req, res) {
+  // console.log(
+  //   "History",
+  //   History.findOne({
+  //     tree: req.body.userID
+  //   })
+  // );
+
   User.findOne({
     email: req.body.email
   })
