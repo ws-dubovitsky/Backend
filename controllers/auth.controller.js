@@ -1,120 +1,99 @@
-// let User = require("../models/user.model");
-// var bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const User = require("../config/schemas/user.schema");
+process.env.SECRET_KEY = "secret";
 
-// // function checkLogin (req, res) {
-// //     console.log('checkLogin', req.query)
-// //     res.status(401).send({message: 'done'})
-// // }
+//REGISTER
 
-// // function login (req, res) {
-// //     console.log('login', req.body)
-// //     res.status(200).send({message: 'login done'})
+function register(req, res) {
+  const today = new Date();
+  const userData = {
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    password: req.body.password,
+    created: today
+  };
 
-// //     // bcrypt
+  User.findOne({
+    email: req.body.email
+  })
+    .then(user => {
+      if (!user) {
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+          userData.password = hash;
+          User.create(userData)
+            .then(user => {
+              res.status(200).send({ status: user.email + " registered" });
+            })
+            .catch(err => {
+              res.status(401).send("error: " + err);
+            });
+        });
+      } else {
+        res.json({ error: "User already exists" });
+      }
+    })
+    .catch(err => {
+      res.status(401).send("error: " + err);
+    });
+}
 
-// //     //generate token jsonwebtoken
-// //     //jwt.sign
-// //     // res.status(200).send({message: 'ok', token: token})
-// // }
+//LOGIN
 
-// function register(req, res, next) {
-//   // check if the user exist
-//   const { body } = req;
-//   let { login } = body;
-//   let { email } = body;
-//   const { password } = body;
-  
-//   email = email.toLowerCase();
-//   email = email.trim();
-//   // console.log({ login });
-//   // console.log({ email });
-//   // console.log({ password });
- 
+function login(req, res) {
+  User.findOne({
+    email: req.body.email
+  })
+    .then(user => {
+      if (user) {
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+          const payload = {
+            _id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email
+          };
+          let token = jwt.sign(payload, process.env.SECRET_KEY, {
+            expiresIn: 1440
+          });
 
-//   // console.log({ isDeleted });
-//   // console.log({ singUpDate });
+          res.status(200).send(token);
+        } else {
+          res.status(401).send({ error: "User does not exist" });
+        }
+      }
+    })
+    .catch(err => {
+      res.send("error" + err);
+    });
+}
 
-//   ///////////////////////////////////////////
-//   // Проверяем, корректны ли email и password
+//PROFILE
 
-//   if (!login) {
-//     return res.send({
-//       success: false,
-//       message: "Error: Email cannot be blank."
-//     });
-//   }
+function profile(req, res) {
+  // let decoded = jwt.verify(
+  //   req.headers["authorization"],
+  //   process.env.SECRET_KEY
+  // );
+  // User.findOne({
+  //   _id: decoded._id
+  // })
+  //   .then(user => {
+  //     if (user) {
+  //       res.json(user);
+  //       req.user = user
+  //     } else {
+  //       res.send("User does not exist");
+  //     }
+  //   })
+  //   .catch(err => {
+  //     res.send("error: " + err);
+  //   });
+}
 
-//   if (!email) {
-//     return res.send({
-//       success: false,
-//       message: "Error: Email cannot be blank."
-//     });
-//   }
-
-//   if (!password) {
-//     return res.send({
-//       success: false,
-//       message: "Error: Password cannot be blank."
-//     });
-//   }
-
-//   /////////////////////////////////////////////////
-//   // Смотрим, есть ли пользователь с таким же email
-
-//   User.find(
-//     {
-//       email: email
-//     },
-//     (err, previosUser) => {
-//       if (err) {
-//         return res.send({
-//           success: false,
-//           message: "Error: server error"
-//         });
-//       } else if (previosUser.length > 0) {
-//         return res.send({
-//           success: false,
-//           message: "Error: Account already exist."
-//         });
-//       }
-//     }
-//   );
-
-//   ///////////////////////////////////////////
-//   // Если нет, то создаем нового пользователя
-
-//   const newUser = new User();
-//   newUser.login = login;
-//   newUser.email = email;
-//   newUser.password = newUser.generateHash(password);
-//   console.log(newUser);
-
-//   newUser.save((err, user) => {
-//     if (err) {
-//       return res.send({
-//         success: false,
-//         message: "Error: Server error"
-//       });
-//     }
-//     return res.send({
-//       success: true,
-//       message: "Sign up"
-//     });
-//   });
-// }
-
-// module.exports = {
-//   // checkLogin,
-//   // login,
-//   register
-// };
-
-// // return new Promise((resolve, reject) => {
-// //     return AuthController.register()
-// //         .then(result => {
-// //             resolve({result})
-// //         })
-// //         .catch(err => {
-// //             reject(err)
-// //         })
-// // })
+module.exports = {
+  register,
+  login,
+  profile
+};

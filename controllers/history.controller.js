@@ -4,7 +4,7 @@ const cors = require("cors");
 users.use(cors());
 const jwt = require("jsonwebtoken");
 
-let History = require("../config/schemas/History");
+let History = require("../config/schemas/history.schema");
 
 function getUserHistory(req, res) {
   let decoded = jwt.verify(
@@ -17,7 +17,7 @@ function getUserHistory(req, res) {
   })
     .then(History => {
       console.log({ History: History });
-      return res.status(200).send({ History: History });     
+      return res.status(200).send({ History: History });
     })
     .catch(err => console.log(err));
 }

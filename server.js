@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const authMiddleware = require("./middlewares/auth.middleware");
 const config = require("./config/constant");
-const Users = require("./routes/Users");
+const Users = require("./routes/auth.router");
 const port = 3001;
 const mongoURI = config.db_main;
 
@@ -65,7 +65,7 @@ app.use("/api", authMiddleware);
 
 // // Routes
 require("./routes/weather.route")(app);
-require("./config/schemas/History");
+require("./config/schemas/history.schema");
 // app.use("/users", History);
 app.use("/users", Users);
 

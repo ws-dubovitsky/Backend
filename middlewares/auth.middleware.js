@@ -1,15 +1,9 @@
 const jwt = require("jsonwebtoken");
-const User = require("../config/schemas/User");
+const User = require("../config/schemas/user.schema");
 process.env.SECRET_KEY = "secret";
 
 module.exports = function(req, res, next) {
-  // console.log("AUTH MIDDLEWARE");
-  // console.log("AAAA", req.headers);
-  // decode token
-  // get userId from decoded token
-  // find user by this UserId
-  // put the user to req.user
-  // -----------------------------------
+
   let decoded = jwt.verify(
     req.headers["authorization"],
     process.env.SECRET_KEY
@@ -29,5 +23,5 @@ module.exports = function(req, res, next) {
     .catch(err => {
       res.status(500).send("error: " + err);
     });
-  // -----------------------------------
+
 };

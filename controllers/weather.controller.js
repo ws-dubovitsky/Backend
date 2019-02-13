@@ -1,6 +1,6 @@
 const axios = require("axios");
 const config = require("../config/constant");
-const History = require("../config/schemas/History");
+const History = require("../config/schemas/history.schema");
 
 function getWeather(req, res) {
   const lat = req.body.lat;
