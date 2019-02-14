@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const User = require("../config/schemas/user.schema");
+
 const UserModel = require("../models/User.model");
 process.env.SECRET_KEY = "secret";
 
@@ -46,7 +46,7 @@ function login(req, res) {
   User.findOne({
     email: req.body.email
   })
-    .then(user => {
+    .then(users => {
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const payload = {

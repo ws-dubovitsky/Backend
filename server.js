@@ -64,7 +64,7 @@ app.use("/api", authMiddleware);
 
 // // Routes
 require("./routes/weather.route")(app);
-require("./config/schemas/history.schema");
+// require("./config/schemas/history.schema");
 // app.use("/users", History);
 app.use("/users", Users);
 

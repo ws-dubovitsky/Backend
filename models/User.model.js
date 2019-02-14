@@ -2,7 +2,7 @@ const User = require("../config/schemas/user.schema");
 
 const getUsers = function(param) {
   return new Promise((resolve, reject) => {
-    User.findOne(param, (err, res) => {
+    User.find(param, (err, res) => {
       if (err) return reject(err);
       resolve(res);
     });
