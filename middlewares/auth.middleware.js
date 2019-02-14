@@ -3,7 +3,6 @@ const User = require("../config/schemas/user.schema");
 process.env.SECRET_KEY = "secret";
 
 module.exports = function(req, res, next) {
-
   let decoded = jwt.verify(
     req.headers["authorization"],
     process.env.SECRET_KEY
@@ -12,7 +11,6 @@ module.exports = function(req, res, next) {
     _id: decoded._id
   })
     .then(user => {
-      // console.log("USER", user);
       if (user) {
         req.user = user;
         next();
@@ -23,5 +21,4 @@ module.exports = function(req, res, next) {
     .catch(err => {
       res.status(500).send("error: " + err);
     });
-
 };

@@ -11,6 +11,7 @@ function getWeather(req, res) {
 
   return axios.get(url).then(response => {
     res.status(200).send(response.data);
+
     const newHistory = new History();
     newHistory.userID = req.user._id;
     newHistory.weatherList = response.data.list;

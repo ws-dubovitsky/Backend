@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
 const authMiddleware = require("./middlewares/auth.middleware");
 const config = require("./config/constant");
 const Users = require("./routes/auth.router");

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../config/schemas/user.schema");
+const UserModel = require("../models/User.model");
 process.env.SECRET_KEY = "secret";
 
 //REGISTER
@@ -15,7 +16,7 @@ function register(req, res) {
     created: today
   };
 
-  User.findOne({
+  return UserModel.getUsers({
     email: req.body.email
   })
     .then(user => {
@@ -72,28 +73,33 @@ function login(req, res) {
 //PROFILE
 
 function profile(req, res) {
-  // let decoded = jwt.verify(
-  //   req.headers["authorization"],
-  //   process.env.SECRET_KEY
-  // );
-  // User.findOne({
-  //   _id: decoded._id
-  // })
-  //   .then(user => {
-  //     if (user) {
-  //       res.json(user);
-  //       req.user = user
-  //     } else {
-  //       res.send("User does not exist");
-  //     }
-  //   })
-  //   .catch(err => {
-  //     res.send("error: " + err);
-  //   });
+  let decoded = jwt.verify(
+    req.headers["authorization"],
+    process.env.SECRET_KEY
+  );
+  User.findOne({
+    _id: decoded._id
+  })
+    .then(user => {
+      if (user) {
+        res.json(user);
+        req.user = user;
+      } else {
+        res.send("User does not exist");
+      }
+    })
+    .catch(err => {
+      res.send("error: " + err);
+    });
+}
+
+function checkLogin(req, res) {
+  res.status(200).send("Ok");
 }
 
 module.exports = {
   register,
   login,
-  profile
+  profile,
+  checkLogin
 };

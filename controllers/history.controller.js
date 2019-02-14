@@ -16,7 +16,6 @@ function getUserHistory(req, res) {
     userID: decoded._id
   })
     .then(History => {
-      console.log({ History: History });
       return res.status(200).send({ History: History });
     })
     .catch(err => console.log(err));
