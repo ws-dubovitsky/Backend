@@ -19,11 +19,13 @@ function register(req, res) {
   return UserModel.getUsers({
     email: req.body.email
   })
-    .then(user => {
+    .then(users => {
+      const user = users[0];
+      console.log("reg", user);
       if (!user) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash;
-          User.create(userData)
+          UserModel.createUser(userData)
             .then(user => {
               res.status(200).send({ status: user.email + " registered" });
             })
@@ -43,10 +45,13 @@ function register(req, res) {
 //LOGIN
 
 function login(req, res) {
-  User.findOne({
+  console.log("req.body", req.body.password);
+  UserModel.getUsers({
     email: req.body.email
   })
     .then(users => {
+      const user = users[0];
+      console.log("USER", user);
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const payload = {

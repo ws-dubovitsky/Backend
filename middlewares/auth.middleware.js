@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../config/schemas/user.schema");
+const UserModel = require("../models/User.model");
 process.env.SECRET_KEY = "secret";
 
 module.exports = function(req, res, next) {
@@ -7,10 +7,11 @@ module.exports = function(req, res, next) {
     req.headers["authorization"],
     process.env.SECRET_KEY
   );
-  User.findOne({
+  UserModel.getUsers({
     _id: decoded._id
   })
-    .then(user => {
+    .then(users => {
+      const user = users[0]
       if (user) {
         req.user = user;
         next();

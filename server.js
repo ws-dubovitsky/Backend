@@ -5,8 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authMiddleware = require("./middlewares/auth.middleware");
 const config = require("./config/constant");
-const Users = require("./routes/auth.router");
-const port = 3001;
+
 const mongoURI = config.db_main;
 
 app.use((req, res, next) => {
@@ -62,21 +61,10 @@ mongoose
 
 app.use("/api", authMiddleware);
 
-// // Routes
 require("./routes/weather.route")(app);
-// require("./config/schemas/history.schema");
-// app.use("/users", History);
-app.use("/users", Users);
+require("./routes/history.route")(app);
+require("./routes/auth.route")(app);
 
-app.listen(port, () => {
-  console.log("We are live on " + port);
+app.listen(config.port, () => {
+  console.log("We are live on " + config.port);
 });
-
-// // app.get('/', function (req, res) {
-// //   res.sendFile('index.html');
-// // });
-// // app.get("/test", function(req, res) {
-// //   res.send("Hello");
-// // });
-
-// // Add Routes

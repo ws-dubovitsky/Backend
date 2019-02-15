@@ -12,10 +12,8 @@ const getUsers = function(param) {
 const createUser = function(param) {
   return new Promise((resolve, reject) => {
     User.create(param, (err, newUser) => {
-      console.log("NEW USER", newUser);
       if (err) return reject(err);
       resolve(newUser);
-      // saved!
     });
   });
 };

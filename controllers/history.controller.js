@@ -1,10 +1,6 @@
-const express = require("express");
-const users = express.Router();
-const cors = require("cors");
-users.use(cors());
 const jwt = require("jsonwebtoken");
 
-let History = require("../config/schemas/history.schema");
+const History = require("../models/History.model");
 
 function getUserHistory(req, res) {
   let decoded = jwt.verify(
@@ -12,7 +8,7 @@ function getUserHistory(req, res) {
     process.env.SECRET_KEY
   );
 
-  History.find({
+  History.getHistory({
     userID: decoded._id
   })
     .then(History => {
